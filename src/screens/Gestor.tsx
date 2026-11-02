@@ -38,6 +38,7 @@ export function Diagnosticos() {
 
   return (
     <TelaGestor titulo="Diagnósticos">
+      <div className="tabela-rolagem">
       <table className="tabela">
         <thead>
           <tr>
@@ -91,6 +92,7 @@ export function Diagnosticos() {
           })}
         </tbody>
       </table>
+      </div>
     </TelaGestor>
   )
 }

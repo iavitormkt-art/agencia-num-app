@@ -325,3 +325,18 @@ legend { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.4rem; }
 .reavaliacao label { display: grid; gap: 0.3rem; font-size: 0.85rem; font-weight: 500; }
 
 .miudo.erro { color: #c0392b; }
+
+/* Celular: nada passa da largura da tela; a tabela do gestor rola sozinha */
+html, body { overflow-x: hidden; }
+.tabela-rolagem { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--raio); box-shadow: var(--sombra); }
+.tabela-rolagem .tabela { box-shadow: none; min-width: 640px; }
+@media (max-width: 640px) {
+  .prototipo { flex-wrap: wrap; gap: 0.25rem 0.75rem; }
+  .prototipo > span { min-width: 0; overflow-wrap: anywhere; }
+  .gestor__topo { flex-wrap: wrap; gap: 0.5rem 1rem; padding: 0.75rem 1rem; }
+  .gestor__conteudo { padding: 1rem 1rem 3rem; }
+  .gestor__conteudo > h1 { font-size: 1.5rem; }
+  .ficha { flex-direction: column; }
+  .cliente header { flex-wrap: wrap; gap: 0.5rem; padding: 0.9rem 1rem; }
+  .vitorias li { flex-wrap: wrap; }
+}
