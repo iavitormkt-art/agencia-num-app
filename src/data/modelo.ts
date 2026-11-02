@@ -139,6 +139,7 @@ export const INCOMODOS = [
   'Mensagens ficam sem resposta',
   'Não sei se dá resultado',
   'Site fora do ar',
+  'Tive uma experiência ruim com a última agência',
 ]
 
 export const TIPOS_NEGOCIO = [
