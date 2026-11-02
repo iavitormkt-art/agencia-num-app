@@ -24,7 +24,7 @@
 }
 
 * { box-sizing: border-box; }
-body { margin: 0; min-height: 100vh; }
+body { margin: 0; min-height: 100vh; min-height: 100dvh; }
 h1, h2, h3 { font-family: var(--titulo); letter-spacing: -0.02em; margin: 0; }
 h2 { font-size: 1.25rem; margin: 1.5rem 0 0.5rem; }
 p { line-height: 1.5; margin: 0.25rem 0; }
@@ -55,7 +55,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--t
 
 /* Moldura de celular */
 .celular {
-  max-width: 440px; min-height: calc(100vh - 2rem); margin: 0 auto; background: var(--creme);
+  max-width: 440px; width: 100%; flex: 1; margin: 0 auto; background: var(--creme);
   display: flex; flex-direction: column; position: relative;
 }
 @media (min-width: 600px) { .celular { box-shadow: 0 0 0 1px rgba(0,0,0,.05), 0 30px 60px -30px rgba(42,26,31,.5); } }
@@ -288,7 +288,7 @@ legend { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.4rem; }
 .avisos li.nova { border-left: 4px solid var(--tomate); }
 
 /* Gestor */
-.gestor { min-height: calc(100vh - 2rem); background: var(--creme); }
+.gestor { flex: 1; background: var(--creme); }
 .gestor__topo { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background: var(--branco); border-bottom: 1px solid var(--creme-escuro); }
 .gestor__topo nav { display: flex; gap: 1.25rem; }
 .gestor__topo nav a { text-decoration: none; color: var(--tinta-suave); font-weight: 700; }
@@ -340,3 +340,6 @@ html, body { overflow-x: hidden; }
   .cliente header { flex-wrap: wrap; gap: 0.5rem; padding: 0.9rem 1rem; }
   .vitorias li { flex-wrap: wrap; }
 }
+
+/* A página ocupa exatamente a tela (faixa + conteúdo), sem sobra embaixo */
+#root { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
