@@ -44,7 +44,7 @@ export function BoasVindas() {
   const google = async () => {
     if (!modoReal) return navigate('/cadastro')
     const falha = await entrarComGoogle()
-    if (falha) setErro('O login com Google ainda não está disponível. Use o link por e-mail.')
+    if (falha) setErro('O login com Google chega em breve. Por enquanto, digite seu e-mail acima e toque em "Receber link de acesso".')
   }
 
   return (

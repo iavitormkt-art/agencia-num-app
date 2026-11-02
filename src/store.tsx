@@ -161,6 +161,16 @@ function useLoja() {
     },
     entrarComGoogle: async (): Promise<string | null> => {
       if (!supabase) return null
+      // Confere antes se o Google está ligado no Supabase (senão ele mostra uma página de erro crua)
+      try {
+        const r = await fetch(import.meta.env.VITE_SUPABASE_URL + '/auth/v1/settings', {
+          headers: { apikey: import.meta.env.VITE_SUPABASE_KEY },
+        })
+        const cfg = await r.json()
+        if (!cfg?.external?.google) return 'google-desligado'
+      } catch {
+        return 'google-desligado'
+      }
       const { error } = await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: enderecoDeVolta() } })
       return error ? error.message : null
     },
