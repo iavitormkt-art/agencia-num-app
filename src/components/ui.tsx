@@ -69,6 +69,24 @@ export function Aviso() {
   )
 }
 
+// Botão de sair sempre visível no topo (modo real)
+function BotaoSair({ className = 'topo__sair' }: { className?: string }) {
+  const { modoReal, usuario, entrar } = useStore()
+  const navigate = useNavigate()
+  if (!modoReal || !usuario) return null
+  return (
+    <button
+      className={className}
+      onClick={async () => {
+        await entrar(null)
+        navigate('/')
+      }}
+    >
+      Sair
+    </button>
+  )
+}
+
 export function TelaCliente({ children, titulo, voltar, semMenu = false }: { children: ReactNode; titulo?: string; voltar?: string; semMenu?: boolean }) {
   const { negocio, notificacoes } = useCliente()
   const naoLidas = notificacoes.filter((n) => !n.lida).length
@@ -88,6 +106,7 @@ export function TelaCliente({ children, titulo, voltar, semMenu = false }: { chi
             🔔{naoLidas > 0 && <span className="sino__conta">{naoLidas}</span>}
           </Link>
         )}
+        <BotaoSair />
       </header>
       <main className="conteudo">{children}</main>
       {negocio && !semMenu && <MenuCliente />}
@@ -203,6 +222,8 @@ export function TelaGestor({ children, titulo }: { children: ReactNode; titulo: 
             Diagnósticos
           </NavLink>
           <NavLink to="/gestor/clientes">Clientes</NavLink>
+          <NavLink to="/gestor/senha">Senha</NavLink>
+          <BotaoSair className="gestor__sair" />
         </nav>
       </header>
       <main className="gestor__conteudo">

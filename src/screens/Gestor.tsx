@@ -1,7 +1,7 @@
 // Painel do gestor (só o Vitor): diagnósticos, publicação e acompanhamento dos clientes.
 import { useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { BarraNota, NotaAnel, TelaGestor } from '../components/ui'
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
+import { BarraNota, Logo, NotaAnel, TelaGestor } from '../components/ui'
 import {
   CHECKLIST,
   diaDaJornada,
@@ -371,6 +371,94 @@ export function Clientes() {
           </article>
         )
       })}
+    </TelaGestor>
+  )
+}
+
+// Console de acesso do gestor: e-mail + senha (funciona em qualquer navegador,
+// inclusive aba anônima, sem depender do link no e-mail). Endereço: #/admin
+export function ConsoleGestor() {
+  const { modoReal, usuario, carregando, entrarComSenha, entrar } = useStore()
+  const [email, setEmail] = useState('')
+  const [senha, setSenha] = useState('')
+  const [erro, setErro] = useState<string | null>(null)
+  const [entrando, setEntrando] = useState(false)
+
+  if (!modoReal) return <Navigate to="/gestor" />
+  if (carregando) return <div className="console"><p className="sub">Carregando…</p></div>
+  if (usuario?.gestor) return <Navigate to="/gestor" />
+
+  return (
+    <div className="console">
+      <form
+        className="cartao console__cartao"
+        onSubmit={async (e) => {
+          e.preventDefault()
+          setEntrando(true)
+          setErro(null)
+          const falha = await entrarComSenha(email, senha)
+          setEntrando(false)
+          if (falha) setErro('E-mail ou senha incorretos.')
+        }}
+      >
+        <Logo pequeno />
+        <h1>Console do gestor</h1>
+        {usuario && !usuario.gestor && (
+          <p className="miudo erro">
+            Você está conectado como cliente ({usuario.email}).{' '}
+            <button type="button" className="link" onClick={() => entrar(null)}>
+              Sair dessa conta
+            </button>
+          </p>
+        )}
+        <label>
+          E-mail
+          <input type="email" required autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} />
+        </label>
+        <label>
+          Senha
+          <input type="password" required autoComplete="current-password" value={senha} onChange={(e) => setSenha(e.target.value)} />
+        </label>
+        <button className="botao" disabled={entrando}>{entrando ? 'Entrando…' : 'Entrar'}</button>
+        {erro && <p className="miudo erro">{erro}</p>}
+        <p className="miudo">Ainda sem senha? Entre uma vez pelo link do e-mail e defina em Painel → Senha.</p>
+      </form>
+    </div>
+  )
+}
+
+// O gestor logado define ou troca a senha do console.
+export function SenhaGestor() {
+  const { definirSenha } = useStore()
+  const [senha, setSenha] = useState('')
+  const [confirma, setConfirma] = useState('')
+  const [msg, setMsg] = useState<{ ok: boolean; texto: string } | null>(null)
+  return (
+    <TelaGestor titulo="Senha do console">
+      <form
+        className="cartao"
+        style={{ maxWidth: 420 }}
+        onSubmit={async (e) => {
+          e.preventDefault()
+          if (senha.length < 10) return setMsg({ ok: false, texto: 'Use pelo menos 10 caracteres.' })
+          if (senha !== confirma) return setMsg({ ok: false, texto: 'As duas senhas não batem.' })
+          const falha = await definirSenha(senha)
+          setSenha('')
+          setConfirma('')
+          setMsg(falha ? { ok: false, texto: 'Não deu certo: ' + falha } : { ok: true, texto: 'Senha salva. Agora dá para entrar pelo console (#/admin).' })
+        }}
+      >
+        <label>
+          Nova senha
+          <input type="password" autoComplete="new-password" value={senha} onChange={(e) => setSenha(e.target.value)} />
+        </label>
+        <label>
+          Repita a senha
+          <input type="password" autoComplete="new-password" value={confirma} onChange={(e) => setConfirma(e.target.value)} />
+        </label>
+        <button className="botao">Salvar senha</button>
+        {msg && <p className={'miudo' + (msg.ok ? '' : ' erro')}>{msg.texto}</p>}
+      </form>
     </TelaGestor>
   )
 }

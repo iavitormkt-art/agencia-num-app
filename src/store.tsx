@@ -146,12 +146,29 @@ function useLoja() {
   return {
     ...estado,
     modoReal: MODO_REAL,
-    entrar: (negocioId: string | null) => {
+    entrar: async (negocioId: string | null) => {
       if (MODO_REAL) {
-        if (negocioId === null) supabase?.auth.signOut()
+        if (negocioId === null && supabase) {
+          // 'local' sai mesmo sem internet; limpa a tela na hora
+          await supabase.auth.signOut({ scope: 'local' }).catch(() => {})
+          gravado.current = null
+          setEstado({ ...inicial(), carregando: false })
+        }
         return
       }
       setEstado((s) => ({ ...s, sessao: negocioId }))
+    },
+    // Console do gestor: e-mail + senha. Devolve uma mensagem de erro ou null.
+    entrarComSenha: async (email: string, senha: string): Promise<string | null> => {
+      if (!supabase) return null
+      const { error } = await supabase.auth.signInWithPassword({ email, password: senha })
+      return error ? error.message : null
+    },
+    // O gestor logado define/troca a própria senha (ele mesmo digita).
+    definirSenha: async (senha: string): Promise<string | null> => {
+      if (!supabase) return null
+      const { error } = await supabase.auth.updateUser({ password: senha })
+      return error ? error.message : null
     },
     // Login sem senha. Devolve uma mensagem de erro ou null.
     entrarComEmail: async (email: string): Promise<string | null> => {

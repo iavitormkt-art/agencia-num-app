@@ -132,7 +132,7 @@ export function Cadastro() {
   }
 
   return (
-    <TelaCliente titulo={`Cadastro · ${etapa} de 2`} voltar={etapa === 1 ? '/' : undefined} semMenu>
+    <TelaCliente titulo={`Cadastro · ${etapa} de 2`} voltar={etapa === 1 && !modoReal ? '/' : undefined} semMenu>
       <div className="progresso">
         <span style={{ width: etapa === 1 ? '50%' : '100%' }} />
       </div>

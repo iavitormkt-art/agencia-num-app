@@ -1,7 +1,7 @@
 import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { Aviso, BarraPrototipo } from './components/ui'
 import { Avisos, BoasVindas, Cadastro, Conexao, Evolucao, Inicio, Marca, Resultado, Seguranca, Status } from './screens/Cliente'
-import { Clientes, Diagnosticos, FormDiagnostico } from './screens/Gestor'
+import { Clientes, ConsoleGestor, Diagnosticos, FormDiagnostico, SenhaGestor } from './screens/Gestor'
 import { LojaProvider } from './store'
 
 export default function App() {
@@ -24,6 +24,8 @@ export default function App() {
           <Route path="/gestor" element={<Diagnosticos />} />
           <Route path="/gestor/diagnostico/:id" element={<FormDiagnostico />} />
           <Route path="/gestor/clientes" element={<Clientes />} />
+          <Route path="/gestor/senha" element={<SenhaGestor />} />
+          <Route path="/admin" element={<ConsoleGestor />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </HashRouter>
